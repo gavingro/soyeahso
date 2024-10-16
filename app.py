@@ -34,6 +34,15 @@ def main():
                     st.write(icebreaker)
                     st.divider()
 
+        if len(st.session_state["icebreakers"]) > 20:
+            thank_you_steph()
+
+
+@st.dialog("Glad you like it!")
+def thank_you_steph():
+    st.balloons()
+    st.write(f"That's {len(st.session_state['icebreakers'])} icebreakers now!")
+
 
 @st.cache_resource
 def _get_open_ai_key():
