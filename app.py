@@ -16,7 +16,7 @@ def main():
     if st.button("So yeah, so...", type="primary"):
         with st.spinner("...Lemme think..."):
             st.session_state["icebreakers"] += get_quality_icebreaker_questions(
-                n_seeded_questions=6,
+                n_seeded_questions=10,
                 previously_asked_questions=st.session_state["icebreakers"],
             )
         col1, col2, col3 = st.columns(3)
