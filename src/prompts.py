@@ -31,9 +31,9 @@ def get_quality_icebreaker_questions(
             else None
         ),
     )
-    best_questions = select_3_best_questions(initial_questions)
-    plain_questions = plainify_questions(best_questions)
-    return extract_questions(plain_questions)
+    plain_questions = plainify_questions(initial_questions)
+    best_questions = select_3_best_questions(plain_questions)
+    return extract_questions(best_questions)
 
 
 @ell.simple(model="gpt-4o-mini", temperature=1.3)
@@ -100,7 +100,7 @@ def plainify_questions(
     )
 
 
-@ell.simple(model="gpt-4o-mini", temperature=1.0)
+@ell.simple(model="gpt-4o-mini", temperature=0.5)
 def select_3_best_questions(
     questions_text: str,
 ) -> str:
@@ -116,6 +116,7 @@ def select_3_best_questions(
         "Each of them is a question enclosed in square brackets, like [Question?]. "
         "But like, some of them might be too boring, and some of them might be too scary for two best friends on a date. "
         "Could you help select the 3 most interesting questions that would be ideal for breaking the tension on the date? "
+        "I'd love for you to add your own style and put your own spin on them as well! "
         "It'd still be super helpful if you could put the questions in square brackets like they came in, "
         " and not say anything else other than the questions. "
         f"Here are the questions: \n {questions_text}"
