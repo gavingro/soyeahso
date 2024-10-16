@@ -1,2 +1,3 @@
 streamlit
 ell-ai
+python-dotenv
