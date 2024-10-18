@@ -70,6 +70,8 @@ def brainstorm_icebreaker_questions(
         "to answer -- after all, we're just chatting, not coming up with essay prompts or therapy questions. "
         "Multiple choice questions with two answers that reveal emotional preferences are ideal, but "
         "try to make it seem like they are open ended questions. "
+        "You can ask open ended questions instead if you want, but make sure they are easy to answer, like "
+        "around peoples favourite or least favourite things. This shouldn't feel like an interview. "
         f"Each of the {n_questions} questions should be more intimate "
         "and personal than the last question, "
         "with question number 1 being a fairly comfortable question "
