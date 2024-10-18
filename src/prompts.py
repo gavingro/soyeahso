@@ -1,5 +1,5 @@
 from typing import Optional, List
-from random import randint
+import random
 
 import ell
 
@@ -28,15 +28,17 @@ def get_quality_icebreaker_questions(
     initial_questions = brainstorm_icebreaker_questions(
         n_questions=n_seeded_questions,
         previous_questions_text=(
-            "\n".join(previously_asked_questions)
+            "[" "]\n[".join(previously_asked_questions) + "]"
             if previously_asked_questions
             else None
         ),
         **kwargs,
     )
-    plain_questions = plainify_questions(initial_questions, **kwargs)
-    best_questions = select_3_best_questions(plain_questions, **kwargs)
-    return extract_questions(best_questions)
+    selected_questions = random.sample(
+        population=extract_questions(initial_questions), k=3
+    )
+    plain_questions = plainify_questions("\n".join(selected_questions), **kwargs)
+    return extract_questions(plain_questions)
 
 
 @ell.simple(model="gpt-4o-mini", temperature=1.2, top_p=0.9)
@@ -64,15 +66,19 @@ def brainstorm_icebreaker_questions(
         "with question number 1 being a fairly comfortable question "
         f"and question number {n_questions} being fairly prying. "
         "Try to be creative with your questions, don't just ask the same ones another researcher would ask. "
-        "Be sure to separate each question with square brackets, for example [Question?]. "
+        "Be sure to separate each question with square brackets, like the following: "
+        "[Question 1?]\n [Question 2?] \n\n"
         "Do not include anything other than the questions in the square brackets."
     )
     if not previous_questions_text:
         return initial_prompt
 
     follow_up_prompt = (
-        f"Great! Please ask {n_questions} more 'icebreaker' questions in the same way, "
+        f"That's a great start! Please ask {n_questions} more 'icebreaker' questions in the same way, "
         "each different from the previously asked questions. "
+        "Be sure to separate each question with square brackets, like the following: "
+        "[Question 1?]\n [Question 2?] \n\n"
+        "Do not include anything other than the questions in the square brackets."
     )
     return [
         ell.user(initial_prompt),
@@ -94,12 +100,13 @@ def plainify_questions(
     """
     return (
         "Here are a few icebreaker questions I heard from a friend. "
-        "Each of them is a question enclosed in square brackets, like [Question?]. "
+        "Each of them is a question enclosed in square brackets, like this: "
+        "[Question 1?]\n [Question 2?] \n\n"
         "But like, they are pretty formal, and I think a chatbot came up with them. "
         "Can you help me out and ask them to me in plain language like we'd normally use in class? "
         "I'd love for you to add your own style and put your own spin on them as well! "
-        "If you'd like, you can make up a one sentance reason about something that you think about often "
-        "that might have inspired the question. "
+        # "If you'd like, you can make up a one sentance reason about something that you think about often "
+        # "that might have inspired the question. "
         "It'd still be super helpful if you could put the questions in square brackets like they came in, "
         " and not say anything else other than the questions. "
         f"Here are the questions: \n {questions_text}"
