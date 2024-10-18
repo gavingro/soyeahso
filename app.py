@@ -22,15 +22,17 @@ def main():
         col1, col2, col3 = st.columns(3)
         for i, icebreaker in enumerate(st.session_state["icebreakers"]):
             if i % 3 == 0:
-                st.divider()
                 with col1:
                     st.write(icebreaker)
+                    st.divider()
             if i % 3 == 1:
                 with col2:
                     st.write(icebreaker)
+                    st.divider()
             if i % 3 == 2:
                 with col3:
                     st.write(icebreaker)
+                    st.divider()
 
         if len(st.session_state["icebreakers"]) > 20:
             thank_you_steph()
