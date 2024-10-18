@@ -34,6 +34,11 @@ def get_quality_icebreaker_questions(
         ),
         **kwargs,
     )
+    question_list = extract_questions(initial_questions)
+    n_questions_to_shave = len(question_list) // 5
+    # Get rid of gnarly personal questions lol.
+    for _ in range(n_questions_to_shave):
+        question_list.pop(-1)
     selected_questions = random.sample(
         population=extract_questions(initial_questions), k=3
     )
