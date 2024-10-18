@@ -89,7 +89,7 @@ def brainstorm_icebreaker_questions(
 
     follow_up_prompt = (
         f"That's a great start! Please ask {n_questions} more 'icebreaker' questions in the same way, "
-        "each different from the previously asked questions. "
+        "but try to ask about something entirely different than the questions you've already asked. "
         "Be sure to separate each question with square brackets, like the following: "
         "[Question 1?]\n [Question 2?] \n\n"
         "Do not include anything other than the questions in the square brackets."
