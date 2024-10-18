@@ -5,7 +5,9 @@ import ell
 
 
 def get_quality_icebreaker_questions(
-    n_seeded_questions: int = 5, previously_asked_questions: Optional[List[str]] = None
+    n_seeded_questions: int = 5,
+    previously_asked_questions: Optional[List[str]] = None,
+    **kwargs,
 ) -> List[str]:
     """
     Generate 3 quality icebreaker questions.
@@ -30,13 +32,14 @@ def get_quality_icebreaker_questions(
             if previously_asked_questions
             else None
         ),
+        **kwargs,
     )
-    plain_questions = plainify_questions(initial_questions)
-    best_questions = select_3_best_questions(plain_questions)
+    plain_questions = plainify_questions(initial_questions, **kwargs)
+    best_questions = select_3_best_questions(plain_questions, **kwargs)
     return extract_questions(best_questions)
 
 
-@ell.simple(model="gpt-4o-mini", temperature=1.3)
+@ell.simple(model="gpt-4o-mini", temperature=1.2, top_p=0.9)
 def brainstorm_icebreaker_questions(
     n_questions: int, previous_questions_text: Optional[str] = None
 ):
@@ -60,6 +63,7 @@ def brainstorm_icebreaker_questions(
         "and personal than the last question, "
         "with question number 1 being a fairly comfortable question "
         f"and question number {n_questions} being fairly prying. "
+        "Try to be creative with your questions, don't just ask the same ones another researcher would ask. "
         "Be sure to separate each question with square brackets, for example [Question?]. "
         "Do not include anything other than the questions in the square brackets."
     )
@@ -77,7 +81,7 @@ def brainstorm_icebreaker_questions(
     ]
 
 
-@ell.simple(model="gpt-4o-mini", temperature=1.0)
+@ell.simple(model="gpt-4o-mini", temperature=1.0, top_p=0.6)
 def plainify_questions(
     questions_text: str,
 ) -> str:
@@ -94,13 +98,15 @@ def plainify_questions(
         "But like, they are pretty formal, and I think a chatbot came up with them. "
         "Can you help me out and ask them to me in plain language like we'd normally use in class? "
         "I'd love for you to add your own style and put your own spin on them as well! "
+        "If you'd like, you can make up a one sentance reason about something that you think about often "
+        "that might have inspired the question. "
         "It'd still be super helpful if you could put the questions in square brackets like they came in, "
         " and not say anything else other than the questions. "
         f"Here are the questions: \n {questions_text}"
     )
 
 
-@ell.simple(model="gpt-4o-mini", temperature=0.5)
+@ell.simple(model="gpt-4o-mini", temperature=0.5, top_p=0.3)
 def select_3_best_questions(
     questions_text: str,
 ) -> str:
@@ -114,9 +120,10 @@ def select_3_best_questions(
     return (
         "Here are a few icebreaker questions I heard from a friend. "
         "Each of them is a question enclosed in square brackets, like [Question?]. "
-        "But like, some of them might be too boring, and some of them might be too scary for two best friends on a date. "
+        "But like, some of them might be too boring, and some of them might be too scary for these two strangers on a date. "
         "Could you help select the 3 most interesting questions that would be ideal for breaking the tension on the date? "
         "I'd love for you to add your own style and put your own spin on them as well! "
+        "Try to pick creative questions that sound novel, but also easy to answer. "
         "It'd still be super helpful if you could put the questions in square brackets like they came in, "
         " and not say anything else other than the questions. "
         f"Here are the questions: \n {questions_text}"
