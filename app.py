@@ -35,13 +35,16 @@ def main():
                     st.divider()
 
         if len(st.session_state["icebreakers"]) > 20:
-            thank_you_steph()
+            if len(st.session_state["icebreakers"]) % 6 == 0:
+                thank_you_steph()
 
 
 @st.dialog("Glad you like it!")
 def thank_you_steph():
     st.balloons()
-    st.write(f"That's {len(st.session_state['icebreakers'])} icebreakers now!")
+    st.write(
+        f"Whoa that's a lot of icebreakers... {len(st.session_state['icebreakers'])} icebreakers now?"
+    )
 
 
 @st.cache_resource
